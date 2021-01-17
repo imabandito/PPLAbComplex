@@ -26,11 +26,5 @@ public class AudioFile {
 
     @Override
     public String toString() {
-        return "AudioFile {" +
-                "artist='" + artist + "'" +
-                ", title='" + title + "'" +
-                ", genre='" + genre + "'" +
-                ", duration=" + duration +
-                " }";
-    }
+        return "artist = " + artist  + "\ttitle = '" + title  + "',\tgenre = " + genre  + ",\tduration = " + duration; }
 }
