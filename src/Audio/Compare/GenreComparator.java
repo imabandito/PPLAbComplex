@@ -1,4 +1,6 @@
-package Audio;
+package Audio.Compare;
+
+import Audio.Storage.AudioFile;
 
 import java.util.Comparator;
 

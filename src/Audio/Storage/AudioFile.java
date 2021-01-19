@@ -1,4 +1,6 @@
-package Audio;
+package Audio.Storage;
+
+import java.util.Objects;
 
 public class AudioFile {
     private  String artist;
@@ -23,6 +25,20 @@ public class AudioFile {
     public void setTitle(String title) { this.title = title; }
     public void setGenre(String genre) { this.genre = genre; }
     public void setDuration(int duration) { this.duration = duration; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AudioFile audio = (AudioFile) o;
+        return  artist.equals(audio.artist) &&
+                title.equals(audio.title) &&
+                genre.equals(audio.genre) &&
+                duration == audio.duration;
+    }
+
+    @Override
+    public int hashCode() { return Objects.hash(artist,title,genre,duration); }
 
     @Override
     public String toString() {

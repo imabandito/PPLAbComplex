@@ -1,68 +1,34 @@
 package Audio.Storage;
 
-import Audio.AudioFile;
-import Audio.GenreComparator;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 //Receiver
 public class Disk {
-    private List<AudioFile> audioFiles;
+    private Map<String , AudioCollection> audioCollections;
 
-    public Disk(){ audioFiles = new ArrayList<>(); }
-    public Disk(List<AudioFile> collection) {
-        this.audioFiles = collection;
+    public Disk(){
     }
-    public Disk(String path) throws NumberFormatException, IOException {
-        this.audioFiles = readAudiosFromFile(path);
+    public Disk(Map<String, AudioCollection> collection) {
+        audioCollections = new HashMap<>();
+        this.audioCollections.putAll(collection);
     }
-
-    public void addAudio(AudioFile audioFile){ audioFiles.add(audioFile); }
-    public void addAudios(String path) throws Exception {audioFiles.addAll(readAudiosFromFile(path));}
-    public void deleteAudio(int index){audioFiles.remove(index);}
-    public void deleteAllAudios(){audioFiles.clear();}
-    public List<AudioFile> getAudioFiles(){ return audioFiles; }
-
-    public int calcutateDurarion(){
-        int totalDuration=0;
-        for (AudioFile audioFile: audioFiles) {
-            totalDuration+=audioFile.getDuration();
-        }
-        return totalDuration;
-    }
-    public List<AudioFile> audioByRange(int from,int to){
-        List<AudioFile> list = new ArrayList<>();
-        for (AudioFile audioFile: audioFiles) {
-            if(audioFile.getDuration()>=from && audioFile.getDuration()<=to)
-                list.add(audioFile);
-        }
-        return list;
-    }
-    public List<AudioFile> orderByGenre(){
-        audioFiles.sort(new GenreComparator());
-        return audioFiles;
+    public Disk(String path, String collectionName) throws NumberFormatException, IOException {
+        audioCollections = new HashMap<>();
+        audioCollections.put(collectionName.toLowerCase(),new AudioCollection(path));
     }
 
-    private List<AudioFile> readAudiosFromFile(String path) throws NumberFormatException, IOException {
-        List<AudioFile> audioFiles = new ArrayList<>();
-        int i = 0;
-            Scanner sc = new Scanner(new File(path));
-            sc.useDelimiter("[,\n]");
-            while (sc.hasNext()) {
-                audioFiles.add(new AudioFile());
-                audioFiles.get(i).setArtist(sc.next());
-                audioFiles.get(i).setTitle(sc.next());
-                audioFiles.get(i).setGenre(sc.next());
-                audioFiles.get(i).setDuration((Integer.parseInt(sc.next().trim())));
-                i++;
-            }
-
-        return audioFiles;
+    public AudioCollection getAudioCollection(String collectionName){
+        collectionName = collectionName.toLowerCase();
+        if(audioCollections.containsKey(collectionName))
+            return audioCollections.get(collectionName);
+        addAudioCollection(collectionName);
+        return audioCollections.get(collectionName);
     }
+    public Map<String , AudioCollection> getAudioCollections(){return audioCollections;}
+    public void addAudioCollection(String collectionName){audioCollections.put(collectionName.toLowerCase(),new AudioCollection());}
+    public void addAudioCollection(String collectionName, AudioCollection collection){
+        audioCollections.put(collectionName.toLowerCase(),collection);
+    }
+
 }

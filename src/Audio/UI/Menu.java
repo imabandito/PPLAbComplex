@@ -1,6 +1,8 @@
 package Audio.UI;
 
 import Audio.Commands.Command;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -19,19 +21,25 @@ public class Menu {
         try {
                 pick = getPickedCommand();
                 commands.get(pick).execute();
-            } catch(Exception e){
-            System.out.println(e.getMessage());
+            }
+            catch (IOException e){
+                System.out.println(e.getMessage());
+            }
+            catch(Exception e){
+                System.out.println(e.getMessage());
             }
         }while (!commands.get(pick).getInfo().equals("Exit"));
     }
 
-    private int getPickedCommand()
-    {
+    private int getPickedCommand() throws IOException {
         Scanner scanner = new Scanner(System.in);
         for (int i = 0; i < commands.size(); i++) {
             System.out.println(i+1+". "+commands.get(i).getInfo());
         }
-        return scanner.nextInt()-1;
+        int pick = scanner.nextInt()-1;
+        if(pick<commands.size())
+            return pick;
+        throw new IOException("Wrong input!");
     }
 
 }
